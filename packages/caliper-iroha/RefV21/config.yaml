@@ -1,0 +1,39 @@
+
+test:
+  name: My-network Performance Test \#1 
+  description: This test creates Assets
+  clients:
+    type: local
+    number: 1
+  rounds:
+
+
+  - label: my-network
+      #Create 500 assets
+    txNumber:
+        - 500
+    rateControl:
+        - type: fixed-feedback-rate
+          opts:
+              tps: 5
+              unfinished_per_client: 20
+    arguments:
+        # 1 for smaller logs (10 args); #2 for logs with 15 args, ...
+        type: 1
+        assetNumber: 500
+        transaction: createLogs
+    callback: benchmark/composer/my-network/my-network.js
+
+
+monitor:
+  type:
+  - docker
+  - process
+  docker:
+    name:
+    - all
+  process:
+  - command: node
+    arguments: local-client.js
+    multiOutput: avg
+  interval: 1
